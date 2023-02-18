@@ -11,10 +11,12 @@ export const Container = styled.div`
 `;
 
 export const Logo = styled.div`
-  color: ${({ theme }) => theme.COLORS.PURPFONT};
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
+  > a {
+    color: ${({ theme }) => theme.COLORS.PURPFONT};
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+  }
 `;
 
 export const Search = styled.div`
@@ -37,7 +39,7 @@ export const Menu = styled.div`
   justify-content: center;
   gap: 15px;
 
-  > img {
+  > a > img {
     width: 40px;
     height: 40px;
     border-radius: 50%;

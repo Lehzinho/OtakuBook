@@ -38,12 +38,6 @@ export const Content = styled.div`
 
   margin: 50px auto 0;
   gap: 20px;
-  > div {
-    height: 100%;
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-  }
 `;
 
 export const MyInfo = styled(Template)`

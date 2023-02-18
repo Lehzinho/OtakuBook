@@ -3,6 +3,7 @@ import Otakubook from "../../assets/Otakubook.svg";
 import オタク本 from "../../assets/オタク本.svg";
 import MangaSignIn from "../../assets/MangaSignIn.png";
 import { Button } from "../../components/Button";
+import { Link } from "react-router-dom";
 export function SignUp() {
   return (
     <Container>
@@ -19,7 +20,7 @@ export function SignUp() {
         </p>
         <Button radius="10px" height="65px" width="450px" title="Sign Up" />
         <hr />
-        <a href="#">Log In</a>
+        <Link to="/">Log In</Link>
       </Form>
 
       <Footer>
