@@ -23,7 +23,7 @@ export function SignIn() {
         <input
           type="text"
           placeholder="Email address"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.toLocaleLowerCase())}
         />
         <input
           type="text"

@@ -3,7 +3,7 @@ import { AvatarText, Canvas, Container, File, Frame } from "./style";
 import Avatar from "../../assets/Avatar.png";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
-export function Comment() {
+export function Comment({ setModal }) {
   return (
     <Container>
       <Canvas>
@@ -17,7 +17,7 @@ export function Comment() {
         </File>
         <Button title="Post" />
         <Frame>
-          <AiOutlineCloseCircle />
+          <AiOutlineCloseCircle onClick={() => setModal(false)} />
         </Frame>
       </Canvas>
     </Container>

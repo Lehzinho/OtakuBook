@@ -14,11 +14,19 @@ import {
 import Avatar from "../../assets/Avatar.png";
 import { Friend } from "../../components/Friend";
 import { Header } from "../../components/Header";
+import { Comment } from "../../components/Comment";
+import { useState } from "react";
+
+function handleModal() {
+  setModal(!modal);
+}
 
 export function Home() {
+  const [modal, setModal] = useState(false);
   return (
     <Container>
       <Nav />
+      {modal && <Comment setModal={setModal} />}
       <Content>
         <section>
           <MyInfo>
@@ -35,7 +43,7 @@ export function Home() {
         <section>
           <Posts>
             <img src={Avatar} alt="" />
-            <button>What is in your mind?</button>
+            <button onClick={setModal}>What is in your mind?</button>
           </Posts>
           <Feed>
             <Post />

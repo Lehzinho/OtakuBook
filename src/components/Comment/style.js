@@ -7,7 +7,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   background-color: rgba(26, 26, 26, 0.62);
-  position: relative;
+  position: absolute;
   z-index: 0;
 `;
 export const Canvas = styled.div`
