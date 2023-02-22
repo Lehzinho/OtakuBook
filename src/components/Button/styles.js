@@ -10,4 +10,5 @@ export const Container = styled.button.attrs((props) => ({
   margin: 0 auto;
   border-radius: ${(props) => props.radius};
   background-color: ${({ theme }) => theme.COLORS.GREENBK};
+  cursor: pointer;
 `;

@@ -1,11 +1,20 @@
 import { Container, Logo, Menu, Search } from "./styles";
 import Otakubook from "../../assets/Otakubook.svg";
 import オタク本 from "../../assets/オタク本.svg";
-import { AiOutlineHome, AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
+import {
+  AiOutlineHome,
+  AiOutlineBell,
+  AiOutlineSearch,
+  AiOutlineLogout,
+} from "react-icons/ai";
 import avatar from "../../assets/Avatar.png";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/auth";
+
+function handleLogout() {}
 
 export function Nav() {
+  const { signOut, avatarUrl } = useAuth();
   return (
     <Container>
       <Logo>
@@ -27,7 +36,10 @@ export function Nav() {
           <AiOutlineHome />
         </Link>
         <Link to="/profile">
-          <img src={avatar} alt="Avatar" />
+          <img src={avatarUrl} alt="Avatar" />
+        </Link>
+        <Link to="/">
+          <AiOutlineLogout onClick={signOut} />
         </Link>
       </Menu>
     </Container>

@@ -1,5 +1,6 @@
 import { Nav } from "../../components/Nav";
 import { Post } from "../../components/Posts";
+import { useAuth } from "../../hooks/auth";
 
 import {
   BestSeller,
@@ -11,7 +12,6 @@ import {
   Posts,
   WhatsNext,
 } from "./styles";
-import Avatar from "../../assets/Avatar.png";
 import { Friend } from "../../components/Friend";
 import { Header } from "../../components/Header";
 import { Comment } from "../../components/Comment";
@@ -23,6 +23,8 @@ function handleModal() {
 
 export function Home() {
   const [modal, setModal] = useState(false);
+  const { avatarUrl } = useAuth();
+
   return (
     <Container>
       <Nav />
@@ -42,7 +44,7 @@ export function Home() {
         </section>
         <section>
           <Posts>
-            <img src={Avatar} alt="" />
+            <img src={avatarUrl} alt="" />
             <button onClick={setModal}>What is in your mind?</button>
           </Posts>
           <Feed>
@@ -60,7 +62,7 @@ export function Home() {
           </WhatsNext>
           <Friends>
             <div className="messages">
-              <img src={Avatar} alt="" />
+              <img src={avatarUrl} alt="" />
               <h3>Friends</h3>
               <hr />
             </div>

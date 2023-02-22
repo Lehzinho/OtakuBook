@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "../services/api";
+import AvatarPaceholder from "../assets/Profile_avatar_placeholder_large.png";
 
 export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [data, setData] = useState({});
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   async function signIn({ email, password }) {
     try {
@@ -25,6 +27,57 @@ function AuthProvider({ children }) {
     }
   }
 
+  async function updateProfile({ user, avatarFile, backgroundFile }) {
+    try {
+      const fileUploadForm = new FormData();
+
+      if (avatarFile) {
+        console.log("avatar");
+        fileUploadForm.append("avatar", avatarFile);
+      }
+
+      if (backgroundFile) {
+        console.log("background");
+        fileUploadForm.append("background", backgroundFile);
+      }
+
+      const response = await api.patch("/users/avatar", fileUploadForm);
+
+      user.background = response.data.background;
+      user.avatar = response.data.avatar;
+
+      localStorage.setItem("@otakubooks:user", JSON.stringify(user));
+
+      await api.put("/users", user);
+
+      setData({ user, token: data.token });
+      alert("Perfil atualizado");
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Não foi possíve atualizar o perfil");
+      }
+    }
+  }
+
+  function signOut() {
+    localStorage.removeItem("@otakubooks:token");
+    localStorage.removeItem("@otakubooks:user");
+
+    setData({});
+  }
+
+  useEffect(() => {
+    if (data.user) {
+      setAvatarUrl(
+        data.user.avatar
+          ? `${api.defaults.baseURL}/avatar/${data.user.avatar}`
+          : AvatarPaceholder
+      );
+    }
+  }, [data]);
+
   useEffect(() => {
     const token = localStorage.getItem("@otakubooks:token");
     const user = localStorage.getItem("@otakubooks:user");
@@ -37,7 +90,9 @@ function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn }}>
+    <AuthContext.Provider
+      value={{ user: data.user, signIn, updateProfile, signOut, avatarUrl }}
+    >
       {children}
     </AuthContext.Provider>
   );
