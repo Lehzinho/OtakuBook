@@ -62,6 +62,7 @@ function AuthProvider({ children }) {
   }
 
   function signOut() {
+    // Clear local storage
     localStorage.removeItem("@otakubooks:token");
     localStorage.removeItem("@otakubooks:user");
 
@@ -69,6 +70,7 @@ function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    //Provide a avatar to the pages
     if (data.user) {
       setAvatarUrl(
         data.user.avatar
@@ -79,6 +81,7 @@ function AuthProvider({ children }) {
   }, [data]);
 
   useEffect(() => {
+    //Manage Local storage
     const token = localStorage.getItem("@otakubooks:token");
     const user = localStorage.getItem("@otakubooks:user");
 

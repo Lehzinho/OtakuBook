@@ -15,7 +15,8 @@ import {
 import { Friend } from "../../components/Friend";
 import { Header } from "../../components/Header";
 import { Comment } from "../../components/Comment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
 
 function handleModal() {
   setModal(!modal);
@@ -23,7 +24,21 @@ function handleModal() {
 
 export function Home() {
   const [modal, setModal] = useState(false);
+  const [search, setSearch] = useState("");
+  const [comments, setComments] = useState(null);
+
   const { avatarUrl } = useAuth();
+
+  async function updateFeed() {
+    const feed = await api.get(`/comments?comment=${search}`);
+    setComments(feed.data.commentsWithLikes);
+  }
+
+  // useEffect(() => {
+  //   updateFeed();
+  // }, []);
+
+  // comments && console.log(comments);
 
   return (
     <Container>
@@ -48,11 +63,7 @@ export function Home() {
             <button onClick={setModal}>What is in your mind?</button>
           </Posts>
           <Feed>
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
+            <Post userId={1} likes={1} comment={1} subComment={1} file={1} />
           </Feed>
         </section>
         <section className="watchAndFrinds">

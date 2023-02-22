@@ -1,29 +1,30 @@
 import { Container, Content, Interaction, User } from "./styles";
-import Avatar from "../../assets/Avatar.png";
-export function Post() {
+import { api } from "../../services/api";
+import { useEffect, useState } from "react";
+
+export function Post({ userId, likes, comment, subComment, file }) {
+  const [user, setUser] = useState(null);
+  const [userAvatar, setUserAvatar] = useState(null);
+  const avatar = user && `${api.defaults.baseURL}/avatar/${user.avatar}`;
+
+  useEffect(() => {
+    async function getUser() {
+      const user = await api.get(`/users/?id=${1}`);
+      setUser(user.data);
+    }
+    getUser();
+  }, []);
+
+  // user && console.log(userAvatar);
   return (
     <Container>
       <User>
-        <img src={Avatar} alt="   " />
-        <p>User Name</p>
+        <img src={user && avatar} alt="   " />
+        <p>{user && user.name}</p>
       </User>
       <Content>
-        <img src="" alt="" />
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam,
-          odio. Odio ratione quia qui saepe! Qui laudantium perferendis totam
-          temporibus eveniet omnis iusto obcaecati, unde voluptates a! Quam,
-          quod inventore. Lorem, ipsum dolor sit amet consectetur adipisicing
-          elit. Quis quam id sed, dolores esse, impedit at mollitia tenetur quos
-          delectus quae facilis obcaecati amet fugit aut ullam alias itaque
-          corporis? Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          Doloremque repellat maxime eos quasi? Inventore adipisci laboriosam
-          sequi vitae voluptatem, odit fugiat ipsam veritatis perferendis
-          deleniti tempora magni placeat asperiores delectus! Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Beatae aspernatur nam dolorem
-          inventore modi? Ad dolores sapiente hic quidem, animi repellat earum
-          quos minima labore, officiis molestias fugit? Obcaecati, amet!
-        </p>
+        <img src={""} alt="" />
+        <p>{comment}</p>
       </Content>
       <Interaction></Interaction>
     </Container>

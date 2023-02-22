@@ -16,16 +16,12 @@ export function Header({
   setBackgroundFile,
 }) {
   const { user, avatarUrl } = useAuth();
-  // const avatarUlr = user.avatar
-  //   ? `${api.defaults.baseURL}/avatar/${user.avatar}`
-  //   : AvatarPaceholder;
 
   const backgroundUlr = user.background
     ? `${api.defaults.baseURL}/background/${user.background}`
     : Background;
 
   const [background, setBackground] = useState(backgroundUlr);
-  const [avatar, setAvatar] = useState(avatarUrl);
 
   function handleAvatarFile(event) {
     const file = event.target.files[0];
@@ -56,7 +52,7 @@ export function Header({
         </label>
       )}
       <div>
-        <img src={avatar} alt="Avatar" />
+        <img src={avatarUrl} alt="Avatar" />
         {edit && (
           <label htmlFor="avatar">
             <AiOutlineEdit />
