@@ -24,7 +24,7 @@ export const Canvas = styled.div`
 
   padding: 40px;
 `;
-export const File = styled.div`
+export const File = styled.form`
   display: flex;
   align-items: center;
   justify-content: flex-start;

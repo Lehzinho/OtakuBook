@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [data, setData] = useState({});
-  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatar, setAvatar] = useState(null);
 
   async function signIn({ email, password }) {
     try {
@@ -72,7 +72,7 @@ function AuthProvider({ children }) {
   useEffect(() => {
     //Provide a avatar to the pages
     if (data.user) {
-      setAvatarUrl(
+      setAvatar(
         data.user.avatar
           ? `${api.defaults.baseURL}/avatar/${data.user.avatar}`
           : AvatarPaceholder
@@ -94,7 +94,14 @@ function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user: data.user, signIn, updateProfile, signOut, avatarUrl }}
+      value={{
+        user: data.user,
+        signIn,
+        updateProfile,
+        signOut,
+        avatar,
+        setAvatar,
+      }}
     >
       {children}
     </AuthContext.Provider>

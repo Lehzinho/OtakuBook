@@ -1,7 +1,7 @@
 import { Container } from "./styles";
 import Avatar from "../../assets/Avatar.png";
 
-export function Friend() {
+export default function Friend() {
   return (
     <Container>
       <img src={Avatar} alt="" />

@@ -1,5 +1,3 @@
-import { Nav } from "../../components/Nav";
-import { Post } from "../../components/Posts";
 import { useAuth } from "../../hooks/auth";
 
 import {
@@ -12,11 +10,13 @@ import {
   Posts,
   WhatsNext,
 } from "./styles";
-import { Friend } from "../../components/Friend";
-import { Header } from "../../components/Header";
-import { Comment } from "../../components/Comment";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
+import FeedPost from "../../components/Posts";
+import Friend from "../../components/Friend";
+import { Header } from "../../components/Header";
+import { Comment } from "../../components/Comment";
+import { Nav } from "../../components/Nav";
 
 function handleModal() {
   setModal(!modal);
@@ -27,16 +27,16 @@ export function Home() {
   const [search, setSearch] = useState("");
   const [comments, setComments] = useState(null);
 
-  const { avatarUrl } = useAuth();
+  const { avatar } = useAuth();
 
   async function updateFeed() {
     const feed = await api.get(`/comments?comment=${search}`);
     setComments(feed.data.commentsWithLikes);
   }
 
-  // useEffect(() => {
-  //   updateFeed();
-  // }, []);
+  useEffect(() => {
+    updateFeed();
+  }, [modal]);
 
   // comments && console.log(comments);
 
@@ -59,11 +59,14 @@ export function Home() {
         </section>
         <section>
           <Posts>
-            <img src={avatarUrl} alt="" />
+            <img src={avatar} alt="" />
             <button onClick={setModal}>What is in your mind?</button>
           </Posts>
           <Feed>
-            <Post userId={1} likes={1} comment={1} subComment={1} file={1} />
+            {comments &&
+              comments.map((e, index) => (
+                <FeedPost modal={modal} key={index} comments={e} />
+              ))}
           </Feed>
         </section>
         <section className="watchAndFrinds">
@@ -73,7 +76,7 @@ export function Home() {
           </WhatsNext>
           <Friends>
             <div className="messages">
-              <img src={avatarUrl} alt="" />
+              <img src={avatar} alt="" />
               <h3>Friends</h3>
               <hr />
             </div>

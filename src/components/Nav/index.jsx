@@ -14,7 +14,7 @@ import { useAuth } from "../../hooks/auth";
 function handleLogout() {}
 
 export function Nav() {
-  const { signOut, avatarUrl } = useAuth();
+  const { signOut, avatar } = useAuth();
   return (
     <Container>
       <Logo>
@@ -36,7 +36,7 @@ export function Nav() {
           <AiOutlineHome />
         </Link>
         <Link to="/profile">
-          <img src={avatarUrl} alt="Avatar" />
+          <img src={avatar} alt="Avatar" />
         </Link>
         <Link to="/">
           <AiOutlineLogout onClick={signOut} />
