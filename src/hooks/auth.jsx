@@ -26,6 +26,7 @@ function AuthProvider({ children }) {
       }
     }
   }
+  console.log(data);
 
   async function updateProfile({ user, avatarFile, backgroundFile }) {
     try {

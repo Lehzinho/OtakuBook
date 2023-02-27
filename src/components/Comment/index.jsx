@@ -11,15 +11,12 @@ export function Comment({ setModal }) {
   const [comment, setComment] = useState("");
   const [commentFile, setCommentFile] = useState(null);
   const [commentModalt, setCommentModalt] = useState(false);
-  const [commentFilePreview, setCommentFilePreview] = useState(null);
   const { avatar } = useAuth();
 
   function handleFile(event) {
     const file = event.target.files[0];
+    console.log(file.size);
     setCommentFile(file);
-
-    const filePreview = URL.createObjectURL(file);
-    setCommentFilePreview(filePreview);
   }
 
   function handleComments() {

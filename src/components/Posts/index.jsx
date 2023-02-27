@@ -8,10 +8,10 @@ import HappyEmo from "../../assets/EmoHappy.svg";
 import CommentsEmo from "../../assets/EmoComments.svg";
 
 export default function FeedPost({ modal, comments }) {
-  const [user, setUser] = useState(null);
-  const [happy, setHappy] = useState(false);
-  const [star, setStar] = useState(false);
-  const [angry, setAngry] = useState(false);
+  const [likes, setLikes] = useState(null);
+  const [happy, setHappy] = useState(null);
+  const [star, setStar] = useState(null);
+  const [angry, setAngry] = useState(null);
   const avatar = `${api.defaults.baseURL}/avatar/${comments.commentUser[0].avatar}`;
   const displayFile =
     comments.file && `${api.defaults.baseURL}/uploads/${comments.file}`;
@@ -22,11 +22,6 @@ export default function FeedPost({ modal, comments }) {
       setHappy(false);
       setStar(false);
       setAngry(false);
-      api.post(`/likes/${comments.id}`, {
-        like: happy,
-        sad: star,
-        dislike: angry,
-      });
       return;
     }
     setHappy(false);
@@ -35,16 +30,29 @@ export default function FeedPost({ modal, comments }) {
     triger === "happy" && setHappy(true);
     triger === "star" && setStar(true);
     triger === "angry" && setAngry(true);
-  }
-
-  useEffect(() => {
     api.post(`/likes/${comments.id}`, {
       like: happy,
       sad: star,
       dislike: angry,
     });
+  }
+
+  useEffect(() => {
+    async function getLikes() {
+      const likes = await api.get(`/likes/${comments.id}`);
+      setLikes(likes);
+    }
+    console.log(happy, star, angry);
+    happy ||
+      star ||
+      (angry &&
+        api.post(`/likes/${comments.id}`, {
+          like: happy,
+          sad: star,
+          dislike: angry,
+        }));
+    getLikes();
   }, [happy, star, angry]);
-  // user && console.log(userAvatar);
   return (
     <Container>
       <User>
