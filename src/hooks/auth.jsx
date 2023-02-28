@@ -26,19 +26,16 @@ function AuthProvider({ children }) {
       }
     }
   }
-  console.log(data);
 
   async function updateProfile({ user, avatarFile, backgroundFile }) {
     try {
       const fileUploadForm = new FormData();
 
       if (avatarFile) {
-        console.log("avatar");
         fileUploadForm.append("avatar", avatarFile);
       }
 
       if (backgroundFile) {
-        console.log("background");
         fileUploadForm.append("background", backgroundFile);
       }
 

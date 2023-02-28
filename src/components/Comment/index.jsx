@@ -34,6 +34,7 @@ export function Comment({ setModal }) {
     }
     api.post("/comments", fileUploadForm);
     setModal(false);
+    location.reload();
   }
 
   return (

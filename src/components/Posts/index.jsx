@@ -1,58 +1,96 @@
 import { Container, Content, Interaction, User } from "./styles";
 import { api } from "../../services/api";
-import { useEffect, useState } from "react";
-import { BsChatLeftText } from "react-icons/bs";
+import { useCallback, useEffect, useState } from "react";
 import AngryEmo from "../../assets/EmoAngry.svg";
 import StarEmo from "../../assets/Emostar.svg";
 import HappyEmo from "../../assets/EmoHappy.svg";
 import CommentsEmo from "../../assets/EmoComments.svg";
+import { useAuth } from "../../hooks/auth";
 
 export default function FeedPost({ modal, comments }) {
   const [likes, setLikes] = useState(null);
-  const [happy, setHappy] = useState(null);
-  const [star, setStar] = useState(null);
-  const [angry, setAngry] = useState(null);
+  const [send, setSend] = useState(false);
+  const [happy, setHappy] = useState(false);
+  const [angry, setAngry] = useState(false);
+  const [star, setStar] = useState(false);
+  const [starCount, setStarCount] = useState([]);
+  const [angryCount, setAngryCount] = useState([]);
+  const [happyCount, setHappyCount] = useState([]);
   const avatar = `${api.defaults.baseURL}/avatar/${comments.commentUser[0].avatar}`;
   const displayFile =
     comments.file && `${api.defaults.baseURL}/uploads/${comments.file}`;
+  const { user } = useAuth();
 
-  function changeStatus(e) {
-    const triger = e.target.id;
-    if (e.target.className === "active") {
-      setHappy(false);
-      setStar(false);
-      setAngry(false);
-      return;
-    }
-    setHappy(false);
-    setStar(false);
-    setAngry(false);
-    triger === "happy" && setHappy(true);
-    triger === "star" && setStar(true);
-    triger === "angry" && setAngry(true);
-    api.post(`/likes/${comments.id}`, {
-      like: happy,
-      sad: star,
-      dislike: angry,
+  const changeStatus = useCallback(
+    (e) => {
+      const triger = e.target.id;
+      setSend(true);
+      if (e.target.className === "active") {
+        setHappy(false);
+        setStar(false);
+        setAngry(false);
+      } else {
+        switch (triger) {
+          case "happy":
+            setHappy(true);
+            setStar(false);
+            setAngry(false);
+            break;
+          case "star":
+            setHappy(false);
+            setStar(true);
+            setAngry(false);
+            break;
+          case "angry":
+            setHappy(false);
+            setStar(false);
+            setAngry(true);
+            break;
+        }
+      }
+    },
+    [happy, star, angry]
+  );
+
+  function updateAll(likes) {
+    const newHappyCount = [];
+    const newStarCount = [];
+    const newAngryCount = [];
+    likes.forEach((like) => {
+      if (like.like) newHappyCount.push(like.user_id);
+      if (like.sad) newStarCount.push(like.user_id);
+      if (like.dislike) newAngryCount.push(like.user_id);
     });
+    setHappyCount(newHappyCount);
+    setStarCount(newStarCount);
+    setAngryCount(newAngryCount);
+    const newHappy = newHappyCount.includes(user.id);
+    const newStar = newStarCount.includes(user.id);
+    const newAngry = newAngryCount.includes(user.id);
+    if (newHappy !== happy) setHappy(newHappy);
+    if (newStar !== star) setStar(newStar);
+    if (newAngry !== angry) setAngry(newAngry);
   }
 
   useEffect(() => {
-    async function getLikes() {
-      const likes = await api.get(`/likes/${comments.id}`);
-      setLikes(likes);
-    }
-    console.log(happy, star, angry);
-    happy ||
-      star ||
-      (angry &&
-        api.post(`/likes/${comments.id}`, {
-          like: happy,
-          sad: star,
-          dislike: angry,
-        }));
-    getLikes();
+    const updateLikes = async () => {
+      try {
+        if (send) {
+          await api.post(`/likes/${comments.id}`, {
+            like: happy,
+            sad: star,
+            dislike: angry,
+          });
+        }
+        const response = await api.get(`/likes/${comments.id}`);
+        updateAll(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    updateLikes();
   }, [happy, star, angry]);
+
   return (
     <Container>
       <User>
@@ -71,7 +109,7 @@ export default function FeedPost({ modal, comments }) {
           alt=""
           id="happy"
         />
-        <p>0</p>
+        <p>{happyCount.length === 0 ? 0 : happyCount.length}</p>
         <img
           src={StarEmo}
           className={star ? "active" : ""}
@@ -79,7 +117,7 @@ export default function FeedPost({ modal, comments }) {
           alt=""
           id="star"
         />
-        <p>1</p>
+        <p>{starCount.length === 0 ? 0 : starCount.length}</p>
 
         <img
           src={AngryEmo}
@@ -88,7 +126,7 @@ export default function FeedPost({ modal, comments }) {
           alt=""
           id="angry"
         />
-        <p>2</p>
+        <p>{angryCount.length === 0 ? 0 : angryCount.length}</p>
 
         <img src={CommentsEmo} alt="" />
         <p>3</p>
